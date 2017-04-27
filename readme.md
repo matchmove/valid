@@ -1,6 +1,6 @@
-![Codeship CI Status](https://codeship.com/projects/f00d5830-0afd-0135-7622-4abc4c11ded6/status?branch=master)
+![Codeship CI Status](https://codeship.com/projects/962c61c0-0d4f-0135-6fa4-7a76774b6ff8/status?branch=master)
 
-    import rest "gopkg.in/matchmove/rest.v2"
+    import rest "gopkg.in/matchmove/valid"
 
 # valid
 --
