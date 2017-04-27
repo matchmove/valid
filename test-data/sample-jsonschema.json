@@ -1,0 +1,14 @@
+{
+  "$ref": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "[A-Z]{11}"
+    }
+  }
+}
