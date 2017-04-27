@@ -58,9 +58,9 @@ func (data JSONSchema) Schema() *gojsonschema.Schema {
 }
 
 // Compare compares a json to a json-schema
-func (data JSONSchema) Compare(schema JSONSchema) Result {
+func (data JSONSchema) Compare(s string) Result {
 
-	if data.Body == "" {
+	if data.Body == "" || s == "" {
 		return FailResult("JSON.Body cannot be EMPTY")
 	}
 
@@ -69,7 +69,7 @@ func (data JSONSchema) Compare(schema JSONSchema) Result {
 		err    error
 	)
 
-	if result, err = schema.Schema().Validate(data.Loader()); err != nil {
+	if result, err = data.Schema().Validate(NewJSONSchema(s).Loader()); err != nil {
 		return FailResult(fmt.Sprint("Encountered schema.Validate ERROR:", err))
 	}
 

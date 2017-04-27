@@ -81,7 +81,7 @@ func TestGetSchema(t *testing.T) {
 
 func TestCompare(t *testing.T) {
 	schema := valid.NewJSONSchemaFromFile(jsonSchemaFile)
-	if r := valid.NewJSONSchema(`{"email":"someone@email.com"}`).Compare(schema); !r.Status {
+	if r := schema.Compare(`{"email":"someone@email.com"}`); !r.Status {
 		t.Errorf(
 			"JSON-schema comparison must result to `true`; comparing:\n`%s`\nto\n`%s`",
 			`{"email":"someone@email.com"}`,
@@ -91,7 +91,7 @@ func TestCompare(t *testing.T) {
 
 	// Negative Tests
 
-	if r := valid.NewJSONSchema("").Compare(schema); "JSON.Body cannot be EMPTY" != r.Message {
+	if r := schema.Compare(""); "JSON.Body cannot be EMPTY" != r.Message {
 		t.Errorf(
 			"Expecting error `%s` when Comparing:\nEMPTY\nto\n`%s`\n but got: %s",
 			"JSON.Body cannot be EMPTY",
@@ -103,7 +103,7 @@ func TestCompare(t *testing.T) {
 	var errMsg string
 
 	errMsg = "email: Does not match format 'email'"
-	if r := valid.NewJSONSchema(`{"email":"invalid"}`).Compare(schema); !strings.Contains(r.Message, errMsg) {
+	if r := schema.Compare(`{"email":"invalid"}`); !strings.Contains(r.Message, errMsg) {
 		t.Errorf(
 			"Expecting error cotains `%s` when Comparing:\n%s\nto\n`%s`\n but got: `%s`",
 			errMsg,
@@ -114,7 +114,7 @@ func TestCompare(t *testing.T) {
 	}
 
 	errMsg = "Encountered schema.Validate ERROR:invalid character 'x' looking for beginning of value"
-	if r := valid.NewJSONSchema(`x`).Compare(schema); r.Message != errMsg {
+	if r := schema.Compare("x"); r.Message != errMsg {
 		t.Errorf(
 			"Expecting error `%s` when Comparing:\nx\nto\n`%s`\n but got: `%s`",
 			errMsg,

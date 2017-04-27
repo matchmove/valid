@@ -43,7 +43,7 @@ NewJSONSchemaFromFile loads a json-schema from a file
 #### func (JSONSchema) Compare
 
 ```go
-func (data JSONSchema) Compare(schema JSONSchema) Result
+func (data JSONSchema) Compare(s string) Result
 ```
 Compare compares a json to a json-schema
 
@@ -99,3 +99,54 @@ TypeMatch checks if the `actual` variable has the same type as `expected`.
 func (r Result) PrintIfFail(fn func(...interface{}))
 ```
 PrintIfFail executes a print function, like t.Error, when status is false
+
+## Example
+
+`my-schema.json`
+
+    {
+      "$ref": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "[A-Z]{11}"
+        }
+      }
+    }
+
+`main.go`
+
+    package main
+
+    import (
+        "fmt"
+        "gopkg.in/matchmove/valid"
+    )
+
+    func main() {
+        sampleJson := `{
+          "$ref": "http://json-schema.org/draft-04/schema#",
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "[A-Z]{11}"
+            }
+          }
+        }`
+
+        r := valid.NewJSONSchema(sampleJson).Compare(`{"email":"someone@email.com"}`)
+        fmt.Print(r) //
+
+        v := valid.NewJSONSchemaFromFile("my-schema.json").Compare(`{"email":"invalid"}`)
+        fmt.Print(v.Message) // email: Does not match format 'email'
+    }
